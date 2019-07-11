@@ -1,4 +1,4 @@
-package L5_PrefixSums;
+package l5_PrefixSums;
 
 /**
  * 
