@@ -4,6 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * 
+ * Find the minimal average of any slice containing at least two elements.
+ * 
+ * @author xiong_yi
+ *
+ */
 public class S4MinAvgTwoSlice {
 
     public int solution(int[] A) {
@@ -72,22 +79,71 @@ public class S4MinAvgTwoSlice {
         return result;
     }
 
+    // it doesnt work
+    public int solution3(int[] A) {
+
+        int len = A.length;
+        int sumR = 0;
+        double[] sumArr = new double[len];
+        for (int i = len - 1; i >= 0; i--) {
+            sumR += A[i];
+            sumArr[i] = sumR;
+        }
+
+        int result = 0;
+        double avg = sumArr[0] / len;
+        for (int i = 1; i < len - 1; i++) {
+            double avgInner = sumArr[i] / (len - i);
+            if (avgInner < avg) {
+                avg = avgInner;
+                result = i;
+            }
+        }
+        return result;
+    }
+
+    // search at google
+    public int solution4(int[] A) {
+
+        int len = A.length;
+        int result = 0;
+        double minavg = (A[0] + A[1]) / 2.0d;
+        for (int i = 0; i < len - 1; i++) {
+            double avg2 = (A[i] + A[i + 1]) / 2.0d;
+            if (avg2 < minavg) {
+                minavg = avg2;
+                result = i;
+            }
+
+            if (i + 2 < len) {
+                double avg3 = (A[i] + A[i + 1] + A[i + 2]) / 3.0d;
+                if (avg3 < minavg) {
+                    minavg = avg3;
+                    result = i;
+                }
+            }
+
+        }
+        return result;
+
+    }
+
     @Test
     public void testExample() {
         int[] A = { 4, 2, 2, 5, 1, 5, 8 };
-        assertEquals(1, new S4MinAvgTwoSlice().solution2(A));
+        assertEquals(1, new S4MinAvgTwoSlice().solution4(A));
     }
 
     @Test
     public void testMinus() {
         int[] A = { 4, 2, 2, 5, -100, 1, 8 };
-        assertEquals(4, new S4MinAvgTwoSlice().solution2(A));
+        assertEquals(4, new S4MinAvgTwoSlice().solution4(A));
     }
 
     @Test
     public void testDouble() {
         int[] A = { 4, 2 };
-        assertEquals(0, new S4MinAvgTwoSlice().solution2(A));
+        assertEquals(0, new S4MinAvgTwoSlice().solution4(A));
     }
 
 }
