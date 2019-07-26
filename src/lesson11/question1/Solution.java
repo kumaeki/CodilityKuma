@@ -21,6 +21,10 @@ public class Solution {
         return result;
     }
 
+    /**
+     * get the number of semifactor
+     * 
+     */
     int[] getSemiFactorArr(int[] factorCountArr) {
         int len = factorCountArr.length;
         int[] semiFactorArr = new int[len];
@@ -34,6 +38,10 @@ public class Solution {
         return semiFactorArr;
     }
 
+    /**
+     * get the number of prime factor
+     * 
+     */
     int[] getFactorCountArr(int[] minFactorArr) {
         int len = minFactorArr.length;
         int[] countArr = new int[len];
@@ -49,6 +57,10 @@ public class Solution {
         return countArr;
     }
 
+    /**
+     * get mininum prime factor
+     * 
+     */
     int[] getMinFactor(int N) {
         int[] result = new int[N];
         int sqrt = (int) Math.sqrt(N);
@@ -119,19 +131,5 @@ public class Solution {
         int[] result = { 10, 4, 0 };
         assertArrayEquals(result, new Solution().solution(N, P, Q));
     }
-
-//    public static void main(String args[]) {
-//
-//        int N = 50000;
-//        System.out.println(N * N);
-//        Solution s = new Solution();
-//        int[] minFactor = s.getMinFactor(N);
-//        int[] countArr = s.getFactorCountArr(minFactor);
-//        int[] semiFactorArr = s.getSemiFactorArr(countArr);
-//        for (int i = 0; i < N; i++) {
-//            System.out.println(i + 1 + " : " + minFactor[i] + ":" + countArr[i] + ":" + semiFactorArr[i]);
-//        }
-//
-//    }
 
 }
