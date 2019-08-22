@@ -1,4 +1,4 @@
-package lession07.question2;
+package lession07_StacksAndQueues.question2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-public class Solution {
+public class Fish2 {
     public int solution(int[] A, int[] B) {
         FishStack s = new FishStack();
         for (int i = 0; i < A.length; i++) {
@@ -82,49 +82,49 @@ public class Solution {
     public void testExample1() {
         int[] A = { 4, 3, 2, 1, 5 };
         int[] B = { 0, 1, 0, 0, 0 };
-        assertEquals(2, new Solution().solution(A, B));
+        assertEquals(2, new Fish2().solution(A, B));
     }
 
     @Test
     public void test2fish1() {
         int[] A = { 1, 2 };
         int[] B = { 0, 1 };
-        assertEquals(2, new Solution().solution(A, B));
+        assertEquals(2, new Fish2().solution(A, B));
     }
 
     @Test
     public void test2fish2() {
         int[] A = { 1, 2 };
         int[] B = { 0, 0 };
-        assertEquals(2, new Solution().solution(A, B));
+        assertEquals(2, new Fish2().solution(A, B));
     }
 
     @Test
     public void test2fish3() {
         int[] A = { 1, 2 };
         int[] B = { 1, 1 };
-        assertEquals(2, new Solution().solution(A, B));
+        assertEquals(2, new Fish2().solution(A, B));
     }
 
     @Test
     public void test2fish4() {
         int[] A = { 1, 2 };
         int[] B = { 1, 0 };
-        assertEquals(1, new Solution().solution(A, B));
+        assertEquals(1, new Fish2().solution(A, B));
     }
 
     @Test
     public void test2fish5() {
         int[] A = { 2, 1 };
         int[] B = { 1, 0 };
-        assertEquals(1, new Solution().solution(A, B));
+        assertEquals(1, new Fish2().solution(A, B));
     }
 
     @Test
     public void test5fish1() {
         int[] A = { 1, 2, 3, 4, 5 };
         int[] B = { 0, 1, 1, 1, 0 };
-        assertEquals(2, new Solution().solution(A, B));
+        assertEquals(2, new Fish2().solution(A, B));
     }
 
 }

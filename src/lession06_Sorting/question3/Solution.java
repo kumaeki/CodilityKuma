@@ -1,4 +1,4 @@
-package lession06.question3;
+package lession06_Sorting.question3;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
