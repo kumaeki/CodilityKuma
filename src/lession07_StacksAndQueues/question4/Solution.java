@@ -1,4 +1,4 @@
-package lession07.question4;
+package lession07_StacksAndQueues.question4;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
