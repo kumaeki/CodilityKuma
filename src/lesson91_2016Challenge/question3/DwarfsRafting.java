@@ -8,65 +8,93 @@ public class DwarfsRafting {
 
     final static int LEFT = 0;
     final static int RIGHT = 1;
-    final static int MIDDLE = 2;
-
-    final static int FRONT = 3;
-    final static int BACK = 4;
-    final static int CENTER = 5;
+    final static int FRONT = 2;
+    final static int BACK = 3;
 
     public int solution(int N, String S, String T) {
         int len = N / 2;
-        int size_front_left = len * len;
-        int weight_front_left = 0;
-        int size_front_right = len * len;
-        int weight_front_right = 0;
-        int size_back_left = len * len;
-        int weight_back_left = 0;
-        int size_back_right = len * len;
-        int weight_back_right = 0;
-        int weight_middle = 0;
+
+        // { space , weight }
+        int[] front_left = { len * len, 0 };
+        int[] front_right = { len * len, 0 };
+        int[] back_left = { len * len, 0 };
+        int[] back_right = { len * len, 0 };
 
         // barrels's position
         for (String s : S.split(" ")) {
-            int row = Integer.valueOf(s.substring(0, 1));
-            int column = Integer.valueOf(s.toCharArray()[0]);
+            if (s.isEmpty()) {
+                continue;
+            }
+            int row;
+            int column;
+            if (s.length() == 3) {
+                row = Integer.valueOf(s.substring(0, 2));
+                column = Integer.valueOf(s.toCharArray()[2]);
+            } else {
+                row = Integer.valueOf(s.substring(0, 1));
+                column = Integer.valueOf(s.toCharArray()[1]);
+            }
             int row_position = judgePositionFB(row, N);
             int column_position = judgePositionLR(column, N);
-            if (row_position == FRONT && column_position == LEFT) {
-                size_front_left--;
-            } else if (row_position == FRONT && column_position == RIGHT) {
-                size_front_right--;
-            } else if (row_position == BACK && column_position == LEFT) {
-                size_back_left--;
-            } else if (row_position == BACK && column_position == RIGHT) {
-                size_back_right--;
+            if (row_position == FRONT) {
+                if (column_position == LEFT) {
+                    front_left[0]--;
+                } else if (column_position == RIGHT) {
+                    front_right[0]--;
+                }
+            } else if (row_position == BACK) {
+                if (column_position == LEFT) {
+                    back_left[0]--;
+                } else if (column_position == RIGHT) {
+                    back_right[0]--;
+                }
             }
         }
 
         // occupied position
         for (String s : T.split(" ")) {
-            int row = Integer.valueOf(s.substring(0, 1));
-            int column = Integer.valueOf(s.toCharArray()[0]);
+            if (s.isEmpty()) {
+                continue;
+            }
+            int row;
+            int column;
+            if (s.length() == 3) {
+                row = Integer.valueOf(s.substring(0, 2));
+                column = Integer.valueOf(s.toCharArray()[2]);
+            } else {
+                row = Integer.valueOf(s.substring(0, 1));
+                column = Integer.valueOf(s.toCharArray()[1]);
+            }
             int row_position = judgePositionFB(row, N);
             int column_position = judgePositionLR(column, N);
-            if (row_position == FRONT && column_position == LEFT) {
-                size_front_left--;
-                weight_front_left++;
-            } else if (row_position == FRONT && column_position == RIGHT) {
-                size_front_right--;
-                weight_front_right++;
-            } else if (row_position == BACK && column_position == LEFT) {
-                size_back_left--;
-                weight_back_left++;
-            } else if (row_position == BACK && column_position == RIGHT) {
-                size_back_right--;
-                weight_back_right++;
-            } else {
-                weight_middle++;
+            if (row_position == FRONT) {
+                if (column_position == LEFT) {
+                    front_left[0]--;
+                    front_left[1]++;
+                } else if (column_position == RIGHT) {
+                    front_right[0]--;
+                    front_right[1]++;
+                }
+            } else if (row_position == BACK) {
+                if (column_position == LEFT) {
+                    back_left[0]--;
+                    back_left[1]++;
+                } else if (column_position == RIGHT) {
+                    back_right[0]--;
+                    back_right[1]++;
+                }
             }
         }
 
-        return -1;
+        int max1 = getMax(front_left, back_right);
+        if (max1 == -1)
+            return -1;
+
+        int max2 = getMax(front_right, back_left);
+        if (max2 == -1)
+            return -1;
+
+        return max1 + max2;
     }
 
     /**
@@ -77,15 +105,7 @@ public class DwarfsRafting {
         if (row <= n / 2) {
             return FRONT;
         } else {
-            if (n % 2 == 0) {
-                return BACK;
-            } else {
-                if (row == n / 2 + 1) {
-                    return CENTER;
-                } else {
-                    return BACK;
-                }
-            }
+            return BACK;
         }
     }
 
@@ -97,16 +117,19 @@ public class DwarfsRafting {
         if (column <= 'A' + n / 2 - 1) {
             return LEFT;
         } else {
-            if (n % 2 == 0) {
-                return RIGHT;
-            } else {
-                if (column == 'A' + n / 2) {
-                    return MIDDLE;
-                } else {
-                    return RIGHT;
-                }
-            }
+            return RIGHT;
         }
+    }
+
+    int getMax(int[] part1, int[] part2) {
+        if (part1[1] < part2[1]) {
+            return getMax(part2, part1);
+        }
+        int diff = part1[1] - part2[1];
+        if (diff > part2[0])
+            return -1;
+
+        return diff + 2 * Math.min(part1[0], part2[0] - diff);
     }
 
     @Test
@@ -114,36 +137,8 @@ public class DwarfsRafting {
         int N = 4;
         String S = "1B 1C 4B 1D 2A";
         String T = "3B 2D";
-        String result = "6";
+        int result = 6;
         assertEquals(result, new DwarfsRafting().solution(N, S, T));
-    }
-
-    public static void main(String[] args) {
-//        System.out.println(FRONT == new DwarfsRafting().judgePositionFB(1, 5));
-//        System.out.println(FRONT == new DwarfsRafting().judgePositionFB(2, 5));
-//        System.out.println(CENTER == new DwarfsRafting().judgePositionFB(3, 5));
-//        System.out.println(BACK == new DwarfsRafting().judgePositionFB(4, 5));
-//        System.out.println(BACK == new DwarfsRafting().judgePositionFB(5, 5));
-//
-//        System.out.println(FRONT == new DwarfsRafting().judgePositionFB(1, 6));
-//        System.out.println(FRONT == new DwarfsRafting().judgePositionFB(2, 6));
-//        System.out.println(FRONT == new DwarfsRafting().judgePositionFB(3, 6));
-//        System.out.println(BACK == new DwarfsRafting().judgePositionFB(4, 6));
-//        System.out.println(BACK == new DwarfsRafting().judgePositionFB(5, 6));
-//        System.out.println(BACK == new DwarfsRafting().judgePositionFB(6, 6));
-
-        System.out.println(LEFT == new DwarfsRafting().judgePositionLR('A', 5));
-        System.out.println(LEFT == new DwarfsRafting().judgePositionLR('B', 5));
-        System.out.println(MIDDLE == new DwarfsRafting().judgePositionLR('C', 5));
-        System.out.println(RIGHT == new DwarfsRafting().judgePositionLR('D', 5));
-        System.out.println(RIGHT == new DwarfsRafting().judgePositionLR('E', 5));
-
-        System.out.println(LEFT == new DwarfsRafting().judgePositionLR('A', 6));
-        System.out.println(LEFT == new DwarfsRafting().judgePositionLR('B', 6));
-        System.out.println(LEFT == new DwarfsRafting().judgePositionLR('C', 6));
-        System.out.println(RIGHT == new DwarfsRafting().judgePositionLR('D', 6));
-        System.out.println(RIGHT == new DwarfsRafting().judgePositionLR('E', 6));
-        System.out.println(RIGHT == new DwarfsRafting().judgePositionLR('F', 6));
     }
 
 }
